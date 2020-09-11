@@ -83,9 +83,9 @@ under certain conditions.
             # Decide on encryption params ahead of time 
             
             Write-Output "[*] Starting code layer  ..."
-            $paddingmodes = 'PKCS7','ISO10126','ANSIX923','Zeros'
+            $paddingmodes = 'PKCS7','ISO10126','ANSIX923'
             $paddingmode = $paddingmodes | Get-Random
-            $ciphermodes = 'ECB','CBC'
+            $ciphermodes = 'CBC'
             $ciphermode = $ciphermodes | Get-Random
 
             $keysizes = 128,192,256
@@ -110,11 +110,7 @@ under certain conditions.
             # generate key
             Write-Output "[*] Generating encryption key ..."
             $aesManaged = New-Object "System.Security.Cryptography.AesManaged"
-            if ($ciphermode -eq 'CBC') {
-                $aesManaged.Mode = [System.Security.Cryptography.CipherMode]::CBC
-            } elseif ($ciphermode -eq 'ECB') {
-                $aesManaged.Mode = [System.Security.Cryptography.CipherMode]::ECB
-            }
+            $aesManaged.Mode = [System.Security.Cryptography.CipherMode]::CBC
 
             if ($paddingmode -eq 'PKCS7') {
                 $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7
@@ -122,9 +118,7 @@ under certain conditions.
                 $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::ISO10126
             } elseif ($paddingmode -eq 'ANSIX923') {
                 $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::ANSIX923
-            } elseif ($paddingmode -eq 'Zeros') {
-                $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::Zeros
-            }
+            } 
 
             $aesManaged.BlockSize = 128
             $aesManaged.KeySize = 256
